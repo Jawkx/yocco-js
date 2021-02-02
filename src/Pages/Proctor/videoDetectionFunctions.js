@@ -18,11 +18,14 @@ const drawObjs = (objects, ctx) => {
   });
 };
 
-const drawFaces = (faces, ctx) => {
+const drawFaces = (faces, scaleFactor, ctx) => {
   faces.forEach((face) => {
     const start = face.topLeft;
     const end = face.bottomRight;
-    const size = [end[0] - start[0], end[1] - start[1]];
+    const size = [
+      end[0] / scaleFactor[0] - start[0] / scaleFactor[0],
+      end[1] / scaleFactor[1] - start[1] / scaleFactor[1],
+    ];
 
     ctx.strokeStyle = "#FF0000";
     ctx.font = "18px Arial";
@@ -31,7 +34,12 @@ const drawFaces = (faces, ctx) => {
     // });
     // Draw rectangles and text
     ctx.fillStyle = "#FF0000";
-    ctx.rect(start[0], start[1], size[0], size[1]);
+    ctx.rect(
+      start[0] / scaleFactor[0],
+      start[1] / scaleFactor[1],
+      size[0] / scaleFactor[0],
+      size[1] / scaleFactor[1]
+    );
     ctx.stroke();
   });
 };
@@ -52,7 +60,7 @@ const getLookingDirection = (faces) => {
     const turnPercentX = ((noseX - center[0]) / size[0]) * 100;
     const turnPercentY = ((noseY - center[1]) / size[1]) * 100;
 
-    console.log(turnPercentX, turnPercentY);
+    //console.log(turnPercentX, turnPercentY);
 
     var facingDirection = "Facing";
 
@@ -101,6 +109,8 @@ export const detect = async (
   setObjects,
   setPersonCount,
   setFaces,
+  setScaleFactor,
+  startedFaceScanning,
   webcamRef
 ) => {
   if (
@@ -110,12 +120,23 @@ export const detect = async (
   ) {
     // Get Video Properties
     const video = webcamRef.current.video;
-    const videoWidth = 480;
-    const videoHeight = 360;
 
-    // Set video width
-    webcamRef.current.video.width = videoWidth;
-    webcamRef.current.video.height = videoHeight;
+    const scaledVideoWidth = 480;
+    const scaledVideoHeight = 360;
+
+    if (startedFaceScanning === false) {
+      const captureWidth = video.videoWidth;
+      const captureHeight = video.videoHeight;
+
+      const xScaleFactor = captureWidth / scaledVideoWidth;
+      const yScaleFactor = captureHeight / scaledVideoHeight;
+
+      setScaleFactor([xScaleFactor, yScaleFactor]);
+    }
+
+    // Scale video
+    webcamRef.current.video.width = scaledVideoWidth;
+    webcamRef.current.video.height = scaledVideoHeight;
 
     // Make Detections
     const objs = await cocoNet.detect(video);
@@ -130,15 +151,15 @@ export const detect = async (
   }
 };
 
-export const useCanvas = (obj, faces) => {
+export const useCanvas = (obj, faces, scaleFactor) => {
   const canvasRef = useRef(null);
   useEffect(() => {
     canvasRef.current.width = 480;
     canvasRef.current.height = 360;
     const ctx = canvasRef.current.getContext("2d");
     ctx.clearRect(0, 0, 480, 360);
-    // drawFaces(faces, ctx);
-    drawObjs(obj, ctx);
+    drawFaces(faces, scaleFactor, ctx);
+    drawObjs(obj, scaleFactor, ctx);
   });
 
   return canvasRef;

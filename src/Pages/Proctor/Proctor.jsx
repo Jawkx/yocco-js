@@ -37,14 +37,15 @@ const Proctor = () => {
   const [faces, setFaces] = useState([]);
   const [faceDirectionX, setFaceDirectionX] = useState(null);
   const [personCount, setPersonCount] = useState(null);
-  const [startFaceScanning, setStartFaceScanning] = useState(false);
+  const [startedFaceScanning, setStartedFaceScanning] = useState(false);
+  const [scaleFactor, setScaleFactor] = useState([1, 1]);
 
   // Speech Detection Hooks
   const { transcript, resetTranscript } = useSpeechRecognition();
 
   // Creating reference to HTML object
   const webcamRef = useRef(null);
-  const canvasRef = useCanvas(objects, faces);
+  const canvasRef = useCanvas(objects, faces, scaleFactor);
 
   const startVideoDetection = async () => {
     const cocoNet = await cocossd.load();
@@ -53,11 +54,13 @@ const Proctor = () => {
       detect(
         cocoNet,
         blazefaceNet,
-        setStartFaceScanning,
+        setStartedFaceScanning,
         setFaceDirectionX,
         setObjects,
         setPersonCount,
         setFaces,
+        setScaleFactor,
+        startedFaceScanning,
         webcamRef
       );
     }, 10);
@@ -77,7 +80,7 @@ const Proctor = () => {
         faceDirectionX={faceDirectionX}
         suspiciousObjs={objects}
         personCount={personCount}
-        startFaceScanning={startFaceScanning}
+        startedFaceScanning={startedFaceScanning}
         filteredResult={matchedText}
       />
     </section>
