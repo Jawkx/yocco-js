@@ -17,7 +17,7 @@ import { processSpeech } from "./soundDetectionFunction";
 // Import subcomponents
 import VideoPlayer from "./VideoPlayer";
 import Result from "./Result";
-import Transcript from "./Transcript";
+//import Transcript from "./Transcript";
 
 const suspiciousDict = [
   "question",
