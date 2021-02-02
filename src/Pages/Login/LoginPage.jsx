@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import fire from "../../firebase";
+import styles from "./loginStyle.module.css";
 
 const LoginPage = () => {
 
@@ -58,55 +59,65 @@ const LoginPage = () => {
 	}, []);
 
 	return (
+
 		<div>
 			{user ? (
-				<div>
-					<h>Put main page here</h> 
+				<div className={styles.main}>
+					<h1>REDIRECT TO MAIN PAGE HERE</h1> 
 					<br></br>
 					<Link to = "/proctor"> GO TO PROCTOR </Link>
 					<br></br>
-					<button 
-						onClick = {handleLogout}
-					>
+					<br></br>
+					<button onClick = {handleLogout}>
 						Log out
 					</button>
-
 				</div>    
-			):(
-				<form onSubmit={(e) => handleLogin(e)}>
 
-					<h3>Sign In</h3>
-					<div>
-						<label>Email Address</label>
-						<input 
-							className="form-control"
-							type="text" 
-							id="login"
-							placeholder="Email"
-							autoFocus 
-							required 
-							autocomplete="off"
-							autocapitalize="off"
-							value={email} 
-							onChange={(e) => setEmail(e.target.value)}
-						/>  
+			):(
+				<body>
+					<h1>Yocco.</h1>
+					<div className={styles.center}>
+						<form 
+						className={styles.form}
+						onSubmit={(e) => handleLogin(e)}>
+							<h1>Sign In</h1>
+							<div className={styles.textfield}>
+								<input 
+									className="form-control"
+									type="text" 
+									id="login"
+									autoFocus 
+									required 
+									autocomplete="off"
+									autocapitalize="off"
+									value={email} 
+									onChange={(e) => setEmail(e.target.value)}
+								/>  
+								<span></span>
+								<label>Email Address</label>
+							</div>
+							<div className={styles.textfield}>
+								<input
+									className="form-control"
+									type="password"
+									id="password"
+									required 
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+								/>
+								<span></span>
+								<label>Password</label>
+							</div>				
+							<input
+								type="submit"
+								value="Login"
+							>
+							</input>
+						</form>
 					</div>
-					<div>
-						<label>Password</label>
-						<input
-							className="form-control"
-							type="password"
-							id="password"
-							placeholder="password"
-							required 
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-					</div>				
-				<button>Login</button>
-			</form>
-			)}
-		</div>
+				</body>
+				)}
+			</div>
 	);
 };
 
