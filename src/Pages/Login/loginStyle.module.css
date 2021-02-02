@@ -1,4 +1,4 @@
-body {
+.section {
   margin: 0;
   padding: 0;
   background: linear-gradient(120deg, #2980b9, #8e44ad);
@@ -6,7 +6,7 @@ body {
   overflow: hidden;
 }
 
-h1 {
+.section h1 {
   font-size: 4em;
   color: white;
   padding-top: 100px;
@@ -43,7 +43,7 @@ h1 {
   box-sizing: border-box;
 }
 
-form .textfield {
+.textfield {
   position: relative;
   margin: 30px 0;
   border-bottom: 2px solid #adadad;
@@ -66,12 +66,12 @@ form .textfield {
   color: #adadad;
   transform: translateY(-50%);
   font-size: 16px;
-  transition: .1s;
+  transition: 0.1s;
   pointer-events: none;
 }
 
 .textfield span::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 40px;
   left: 0;
@@ -98,12 +98,12 @@ input[type="submit"] {
   cursor: pointer;
   outline: none;
   margin: 30px 0;
-  transition: .2s ease
+  transition: 0.2s ease;
 }
 
 input[type="submit"]:hover {
-  -webkit-box-shadow: 0px 0px 100px 0px  #2691d9;
-  -moz-box-shadow: 0px 0px 100px 0px  #2691d9;
-  box-shadow: 0px 0px 10px 0px  #2691d9;
-  transition: .1s ease;
+  -webkit-box-shadow: 0px 0px 100px 0px #2691d9;
+  -moz-box-shadow: 0px 0px 100px 0px #2691d9;
+  box-shadow: 0px 0px 10px 0px #2691d9;
+  transition: 0.1s ease;
 }
