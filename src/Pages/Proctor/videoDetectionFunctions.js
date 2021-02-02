@@ -55,14 +55,23 @@ const getLookingDirection = (faces) => {
     console.log(turnPercentX, turnPercentY);
 
     var facingDirection = "Facing";
+
     if (Math.abs(turnPercentX) < 30) {
-      facingDirection.concat(" Foward");
+      facingDirection = facingDirection.concat(" Foward");
     } else {
       if (turnPercentX < 0) {
-        facingDirection.concat(" Right");
+        facingDirection = facingDirection.concat(" Right");
       } else if (turnPercentX > 0) {
-        facingDirection.concat(" Left");
+        facingDirection = facingDirection.concat(" Left");
       }
+    }
+
+    if (turnPercentY > 10) {
+      facingDirection = facingDirection.concat(" Down");
+    }
+
+    if (turnPercentY < -10) {
+      facingDirection = facingDirection.concat(" Up");
     }
 
     return facingDirection;
