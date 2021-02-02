@@ -3,11 +3,11 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
-import filterSpeech from "../../Functions/filterSpeech";
+import processSpeech from "./soundDetectionFunction";
 
 const Transcript = () => {
   const { transcript, resetTranscript } = useSpeechRecognition();
-  const [matchedText, sizeResult] = filterSpeech(transcript);
+  const [matchedText, sizeResult] = processSpeech(transcript);
 
   const handleStopListening = () => {
     SpeechRecognition.stopListening();

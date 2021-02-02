@@ -81,7 +81,6 @@ const Proctor = () => {
         startFaceScanning={startFaceScanning}
         filteredResult={matchedText}
       />
-      <Transcript />
     </section>
   );
 };
