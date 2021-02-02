@@ -1,8 +1,6 @@
 import { useRef, useEffect } from "react";
 
-const suspiciousDict = ["book", "cell phone", "laptop"];
-
-export const drawObjs = (objects, ctx) => {
+const drawObjs = (objects, ctx) => {
   // Loop through each object
   objects.forEach((object) => {
     // Extract boxes and classes
@@ -20,7 +18,7 @@ export const drawObjs = (objects, ctx) => {
   });
 };
 
-export const drawFaces = (faces, ctx) => {
+const drawFaces = (faces, ctx) => {
   faces.forEach((face) => {
     const start = face.topLeft;
     const end = face.bottomRight;
@@ -38,7 +36,7 @@ export const drawFaces = (faces, ctx) => {
   });
 };
 
-export const getLookingDirection = (faces) => {
+const getLookingDirection = (faces) => {
   if (faces.length !== 0) {
     if (faces.length > 1) {
       return "more than one face present";
@@ -54,40 +52,83 @@ export const getLookingDirection = (faces) => {
     const turnPercentX = ((noseX - center[0]) / size[0]) * 100;
     const turnPercentY = ((noseY - center[1]) / size[1]) * 100;
 
-    if (Math.abs(turnPercentX) < 20 && Math.abs(turnPercentY) < 20) {
-      return "Facing Foward";
+    console.log(turnPercentX, turnPercentY);
+
+    var facingDirection = "Facing";
+    if (Math.abs(turnPercentX) < 30) {
+      facingDirection.concat(" Foward");
     } else {
       if (turnPercentX < 0) {
-        return "Facing Right";
+        facingDirection.concat(" Right");
       } else if (turnPercentX > 0) {
-        return "Facing Left";
+        facingDirection.concat(" Left");
       }
     }
+
+    return facingDirection;
   }
 };
 
-export const returnSuspiciousObjects = (objs) => {
+const returnSuspiciousObjects = (objs) => {
+  const suspiciousObjDict = [];
   const suspiciousObjs = objs.filter((obj) =>
-    suspiciousDict.includes(obj.class)
+    suspiciousObjDict.includes(obj.class)
   );
 
   return suspiciousObjs;
 };
 
-export const getPersonCount = (objs) => {
+const getPersonCount = (objs) => {
   const personCount = objs.filter((obj) => obj.class === "person").length;
 
   return personCount;
 };
 
+export const detect = async (
+  cocoNet,
+  blazeNet,
+  setStartFaceScanning,
+  setFaceDirectionX,
+  setObjects,
+  setPersonCount,
+  setFaces,
+  webcamRef
+) => {
+  if (
+    typeof webcamRef.current !== "undefined" &&
+    webcamRef.current !== null &&
+    webcamRef.current.video.readyState === 4
+  ) {
+    // Get Video Properties
+    const video = webcamRef.current.video;
+    const videoWidth = 480;
+    const videoHeight = 360;
+
+    // Set video width
+    webcamRef.current.video.width = videoWidth;
+    webcamRef.current.video.height = videoHeight;
+
+    // Make Detections
+    const objs = await cocoNet.detect(video);
+    const faces = await blazeNet.estimateFaces(video, false);
+
+    // Updating hooks
+    setStartFaceScanning(true);
+    setFaceDirectionX(getLookingDirection(faces));
+    setObjects(returnSuspiciousObjects(objs));
+    setPersonCount(getPersonCount(objs));
+    setFaces(faces);
+  }
+};
+
 export const useCanvas = (obj, faces) => {
   const canvasRef = useRef(null);
   useEffect(() => {
-    canvasRef.current.width = 640;
-    canvasRef.current.height = 480;
+    canvasRef.current.width = 480;
+    canvasRef.current.height = 360;
     const ctx = canvasRef.current.getContext("2d");
-    ctx.clearRect(0, 0, 640, 480);
-    //drawFaces(faces, ctx);
+    ctx.clearRect(0, 0, 480, 360);
+    // drawFaces(faces, ctx);
     drawObjs(obj, ctx);
   });
 

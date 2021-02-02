@@ -1,0 +1,21 @@
+.video {
+  position: absolute;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: -1;
+  width: 480;
+  height: 360;
+}
+
+.canvas {
+  position: absolute;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 1;
+  width: 480;
+  height: 360;
+}

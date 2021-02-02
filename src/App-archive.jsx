@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useRef, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
@@ -11,14 +10,17 @@ import {
   getPersonCount,
 } from "./Functions/detectionFunction";
 
-import VideoPlayer from "./Components/VideoPlayer";
-import Result from "./Components/Result";
+import VideoPlayer from "./Pages/Proctor/VideoPlayer";
+import Result from "./Pages/Proctor/Result";
+import Transcript from "./Pages/Proctor/Transcript";
 
 function App() {
   const [objects, setObjects] = useState([]);
   const [faces, setFaces] = useState([]);
-  const [faceDirectionX, setFaceDirectionX] = useState(0);
-  const [personCount, setPersonCount] = useState(0);
+  const [faceDirectionX, setFaceDirectionX] = useState(null);
+  const [personCount, setPersonCount] = useState(null);
+
+  const [startFaceScanning, setStartFaceScanning] = useState(false);
 
   const webcamRef = useRef(null);
   const canvasRef = useCanvas(objects, faces);
@@ -39,8 +41,8 @@ function App() {
     ) {
       // Get Video Properties
       const video = webcamRef.current.video;
-      const videoWidth = 640;
-      const videoHeight = 480;
+      const videoWidth = 480;
+      const videoHeight = 360;
 
       // Set video width
       webcamRef.current.video.width = videoWidth;
@@ -49,6 +51,7 @@ function App() {
       // Make Detections
       const objs = await cocoNet.detect(video);
       const faces = await blazeNet.estimateFaces(video, false);
+      setStartFaceScanning(true);
       setFaceDirectionX(getLookingDirection(faces));
       setObjects(returnSuspiciousObjects(objs));
       setPersonCount(getPersonCount(objs));
@@ -63,12 +66,16 @@ function App() {
     <div className="App">
       <div className="display-window">
         <VideoPlayer webcamRef={webcamRef} canvasRef={canvasRef} />
+
         <Result
           faceDirectionX={faceDirectionX}
           suspiciousObjs={objects}
           personCount={personCount}
+          startFaceScanning={startFaceScanning}
         />
-        <Transcript />
+        <div className="App">
+          <Transcript />
+        </div>
       </div>
     </div>
   );
