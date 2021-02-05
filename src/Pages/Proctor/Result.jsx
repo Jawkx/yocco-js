@@ -2,15 +2,15 @@ import React from "react";
 import styles from "./proctorStyle.module.css";
 
 const Result = ({
-  faceDirectionX,
+  faceDirection,
   suspiciousObjs,
   personCount,
-  startFaceScanning,
+  startedFaceScanning,
   filteredResult,
 }) => {
   const videoDetectionResults = (
     <div className="resultValue">
-      <h1> Face Direction : {faceDirectionX} </h1>
+      <h1> Face Direction : {faceDirection} </h1>
       <h1> Suspicious Object: </h1>
       <ul>
         {suspiciousObjs.map((obj) => (
@@ -25,8 +25,8 @@ const Result = ({
     <li key={idx}> {result} </li>
   ));
   return (
-    <section className="result">
-      {startFaceScanning ? (
+    <section className={styles.result}>
+      {startedFaceScanning ? (
         videoDetectionResults
       ) : (
         <h1> Starting Video Detection...</h1>

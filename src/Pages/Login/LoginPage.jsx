@@ -3,7 +3,7 @@ import { useHistory, Link } from "react-router-dom";
 import fire from "../../firebase";
 import styles from "./loginStyle.module.css";
 
-const LoginPage = ({ setUser }) => {
+const LoginPage = ({ setUser, user }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");

@@ -1,22 +1,22 @@
 import { useRef, useEffect } from "react";
 
-const drawObjs = (objects, ctx) => {
-  // Loop through each object
-  objects.forEach((object) => {
-    // Extract boxes and classes
-    const [x, y, width, height] = object["bbox"];
-    const text = object["class"];
-    // Set styling
-    ctx.strokeStyle = "#FF0000";
-    ctx.font = "18px Arial";
+// const drawObjs = (objects, ctx) => {
+//   // Loop through each object
+//   objects.forEach((object) => {
+//     // Extract boxes and classes
+//     const [x, y, width, height] = object["bbox"];
+//     const text = object["class"];
+//     // Set styling
+//     ctx.strokeStyle = "#FF0000";
+//     ctx.font = "18px Arial";
 
-    // Draw rectangles and text
-    ctx.fillStyle = "#FF0000";
-    ctx.fillText(text, x, y);
-    ctx.rect(x, y, width, height);
-    ctx.stroke();
-  });
-};
+//     // Draw rectangles and text
+//     ctx.fillStyle = "#FF0000";
+//     ctx.fillText(text, x, y);
+//     ctx.rect(x, y, width, height);
+//     ctx.stroke();
+//   });
+// };
 
 const drawFaces = (faces, scaleFactor, ctx) => {
   faces.forEach((face) => {
@@ -60,11 +60,9 @@ const getLookingDirection = (faces) => {
     const turnPercentX = ((noseX - center[0]) / size[0]) * 100;
     const turnPercentY = ((noseY - center[1]) / size[1]) * 100;
 
-    //console.log(turnPercentX, turnPercentY);
-
     var facingDirection = "Facing";
 
-    if (Math.abs(turnPercentX) < 30) {
+    if (Math.abs(turnPercentX) < 25) {
       facingDirection = facingDirection.concat(" Foward");
     } else {
       if (turnPercentX < 0) {
@@ -86,8 +84,7 @@ const getLookingDirection = (faces) => {
   }
 };
 
-const returnSuspiciousObjects = (objs) => {
-  const suspiciousObjDict = [];
+const returnSuspiciousObjects = (objs, suspiciousObjDict) => {
   const suspiciousObjs = objs.filter((obj) =>
     suspiciousObjDict.includes(obj.class)
   );
@@ -104,13 +101,14 @@ const getPersonCount = (objs) => {
 export const detect = async (
   cocoNet,
   blazeNet,
-  setStartFaceScanning,
-  setFaceDirectionX,
+  setStartedFaceScanning,
+  setFaceDirection,
   setObjects,
   setPersonCount,
   setFaces,
   setScaleFactor,
   startedFaceScanning,
+  suspiciousObjDict,
   webcamRef
 ) => {
   if (
@@ -143,9 +141,9 @@ export const detect = async (
     const faces = await blazeNet.estimateFaces(video, false);
 
     // Updating hooks
-    setStartFaceScanning(true);
-    setFaceDirectionX(getLookingDirection(faces));
-    setObjects(returnSuspiciousObjects(objs));
+    setStartedFaceScanning(true);
+    setFaceDirection(getLookingDirection(faces));
+    setObjects(returnSuspiciousObjects(objs, suspiciousObjDict));
     setPersonCount(getPersonCount(objs));
     setFaces(faces);
   }
@@ -159,7 +157,7 @@ export const useCanvas = (obj, faces, scaleFactor) => {
     const ctx = canvasRef.current.getContext("2d");
     ctx.clearRect(0, 0, 480, 360);
     drawFaces(faces, scaleFactor, ctx);
-    drawObjs(obj, scaleFactor, ctx);
+    //drawObjs(obj, scaleFactor, ctx);
   });
 
   return canvasRef;

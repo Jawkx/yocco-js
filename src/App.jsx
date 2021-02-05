@@ -5,12 +5,19 @@ import Proctor from "./Pages/Proctor/Proctor";
 import LoginPage from "./Pages/Login/LoginPage";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("efykj1");
+  const [examID, setExamID] = useState("TEST1");
   return (
     <div className="App">
       <Router>
-        <Route path="/proctor" render={() => <Proctor uid={user} />} />
-        <Route path="/login" render={() => <LoginPage setUser={setUser} />} />
+        <Route
+          path="/login"
+          render={() => <LoginPage setUser={setUser} user={user} />}
+        />
+        <Route
+          path="/proctor"
+          render={() => <Proctor uid={user} examID={examID} />}
+        />
       </Router>
     </div>
   );

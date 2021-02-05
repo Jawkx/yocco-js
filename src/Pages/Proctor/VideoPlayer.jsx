@@ -15,7 +15,7 @@ const VideoPlayer = (props) => {
   );
 
   return (
-    <section className="videoPlayer">
+    <section className={styles.display}>
       {webcamRef != null ? displayFeed : <h1>Opening Webcam</h1>}
     </section>
   );

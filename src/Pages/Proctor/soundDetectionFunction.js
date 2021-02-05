@@ -3,6 +3,5 @@ export const processSpeech = (transcript, suspiciousDict) => {
   const filteredResult = transcriptArr.filter((item) =>
     suspiciousDict.includes(item)
   );
-  const sizeResult = filteredResult.length;
-  return [filteredResult, sizeResult];
+  return filteredResult;
 };
