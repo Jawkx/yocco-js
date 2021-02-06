@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Proctor from "./Pages/Proctor/Proctor";
 import LoginPage from "./Pages/Login/LoginPage";
+import Homepage from "./Pages/HomePage/HomePage";
 
 const App = () => {
   const [user, setUser] = useState("efykj1");
@@ -18,6 +19,7 @@ const App = () => {
           path="/proctor"
           render={() => <Proctor uid={user} examID={examID} />}
         />
+        <Route path="/homepage" render={() => <Homepage uid={user} />} />
       </Router>
     </div>
   );
