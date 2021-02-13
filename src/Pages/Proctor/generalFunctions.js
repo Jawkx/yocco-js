@@ -37,6 +37,8 @@ export const getOffenses = (faceDirection, personCount, objects) => {
 
   if (personCount > 1) {
     offenses = [...offenses, "multiplePerson"];
+  } else if (faceDirection === undefined) {
+    offenses = [...offenses, "No person"];
   } else if (faceDirection.match(/right|left|up/gim)) {
     offenses = [...offenses, "lookingAround"];
   }
@@ -45,7 +47,6 @@ export const getOffenses = (faceDirection, personCount, objects) => {
 };
 
 export const generateLog = (offenses, trackCount, suspiciousSpeech) => {
-  console.log(offenses);
   const offensesNumber = offenses.length;
   const timeString = new Date().toLocaleTimeString();
   let log = {};
@@ -63,11 +64,12 @@ export const generateLog = (offenses, trackCount, suspiciousSpeech) => {
   log["suspiciousSpeech"] = suspiciousSpeech.toString();
   log["time"] = timeString;
 
+  console.log(log);
   return log;
 };
 
 export const sendResult = (examID, uid, log) => {
-  const docRef = db.collection("Exams").doc(examID);
+  const docRef = db.collection("examsLog").doc(examID);
   docRef.update({
     [uid]: firebase.firestore.FieldValue.arrayUnion(log),
   });

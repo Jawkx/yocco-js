@@ -37,7 +37,7 @@ const suspiciousDict = [
   "value",
 ];
 
-const suspiciousObjDict = ["books , cell phone"];
+const suspiciousObjDict = ["books", "cell phone"];
 
 const Proctor = ({ uid, examID }) => {
   // Video Detection Hooks
@@ -70,21 +70,20 @@ const Proctor = ({ uid, examID }) => {
         setPersonCount,
         setFaces,
         setScaleFactor,
-        startedFaceScanning,
         suspiciousObjDict,
         webcamRef
       );
-    }, 10);
+    }, 20);
   };
 
   const suspiciousSpeech = processSpeech(transcript, suspiciousDict);
 
   const handleSendResult = () => {
     const log = generateLog(offenses, trackCount, suspiciousSpeech);
+    //sendResult(examID, uid, log);
     setOffenses([]);
     setTrackCount(0);
     resetTranscript();
-    sendResult(examID, uid, suspiciousSpeech, logs);
   };
 
   useInterval(() => {

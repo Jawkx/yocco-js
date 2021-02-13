@@ -88,7 +88,6 @@ const returnSuspiciousObjects = (objs, suspiciousObjDict) => {
   const suspiciousObjs = objs.filter((obj) =>
     suspiciousObjDict.includes(obj.class)
   );
-
   return suspiciousObjs;
 };
 
@@ -107,7 +106,6 @@ export const detect = async (
   setPersonCount,
   setFaces,
   setScaleFactor,
-  startedFaceScanning,
   suspiciousObjDict,
   webcamRef
 ) => {
@@ -122,15 +120,13 @@ export const detect = async (
     const scaledVideoWidth = 480;
     const scaledVideoHeight = 360;
 
-    if (startedFaceScanning === false) {
-      const captureWidth = video.videoWidth;
-      const captureHeight = video.videoHeight;
+    const captureWidth = video.videoWidth;
+    const captureHeight = video.videoHeight;
 
-      const xScaleFactor = captureWidth / scaledVideoWidth;
-      const yScaleFactor = captureHeight / scaledVideoHeight;
+    const xScaleFactor = captureWidth / scaledVideoWidth;
+    const yScaleFactor = captureHeight / scaledVideoHeight;
 
-      setScaleFactor([xScaleFactor, yScaleFactor]);
-    }
+    setScaleFactor([xScaleFactor, yScaleFactor]);
 
     // Scale video
     webcamRef.current.video.width = scaledVideoWidth;
