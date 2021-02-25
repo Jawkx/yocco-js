@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+# YOCCO JS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Acronym for You Only Can Cheat Once.
+This is a proof-of-concept online protoring webapp that is develop for our Year-3 Meng in Electrical and Electronic group project.
 
-In the project directory, you can run:
+## Features
 
-### `yarn start`
+The web app is currently in development, and it have features as below:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Detecting the user's face direction.
+2. Detecting suspicious object from the user.
+3. Detecting suspicious speech from user.
+4. Sending the detection results to a server.
+5. Monitoring and compiling "result score" from a client.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Technologies used
 
-### `yarn test`
+The technologies used in this project are as below
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. [React Js](https://reactjs.org/)
+   A Javascript framework for building web interface made by Facebook
 
-### `yarn build`
+2. [Tensorflow Js](https://www.tensorflow.org/js)
+   Tensorflow is a machine learning framework design for running machine learning model on javascript website. Few pretrained models are used such as [Object Detection with CocoSSD](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd) , [Face Detection with BlazeFace](https://github.com/tensorflow/tfjs-models/tree/master/blazeface).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API)
+   An API that was built in into newer version of Google Chrome browser that can enable speech recognition.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+4. [Firebase](https://firebase.google.com/)
+   Firebase is a backend service provided by google. In this project, a database in firebase called Cloud Firestore was used to store result that was sent from the user's device.

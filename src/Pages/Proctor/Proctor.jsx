@@ -80,7 +80,7 @@ const Proctor = ({ uid, examID }) => {
 
   const handleSendResult = () => {
     const log = generateLog(offenses, trackCount, suspiciousSpeech);
-    //sendResult(examID, uid, log);
+    sendResult(examID, uid, log);
     setOffenses([]);
     setTrackCount(0);
     resetTranscript();
