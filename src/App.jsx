@@ -10,9 +10,10 @@ import Homepage from "./Pages/HomePage/HomePage";
 import ModeratorMainPage from "./Pages/Moderator/ModeratorMainPage";
 import ModeratorPage from "./Pages/Moderator/ModeratorPage";
 import StudentLog from "./Pages/Moderator/StudentLog";
+import ModeratorLogin from "./Pages/Moderator/ModeratorLogin";
 
 const App = () => {
-  const [user, setUser] = useState("efykj1");
+  const [user, setUser] = useState("ecywl1");
   const [examID, setExamID] = useState("TEST1");
   return (
     <div className="App">
@@ -30,8 +31,12 @@ const App = () => {
           render={() => <Homepage uid={user} />} 
         />
         <Route
+          path="/moderatorLogin"
+          component={ModeratorLogin}
+        />
+        <Route
           path="/moderatorMain"
-          render={() => <ModeratorMainPage/>}
+          component={ModeratorMainPage}
         />
         <Route
           path="/moderator/:id"

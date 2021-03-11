@@ -1,5 +1,6 @@
 import firebase from "../../firebase";
 var db = firebase.firestore();
+var storage = firebase.storage();
 
 // export const getLog = (faceDirection, personCount, objects, date) => {
 //   let suspicious = false;
@@ -38,7 +39,7 @@ export const getOffenses = (faceDirection, personCount, objects) => {
   if (personCount > 1) {
     offenses = [...offenses, "multiplePerson"];
   } else if (faceDirection === undefined) {
-    offenses = [...offenses, "No person"];
+    offenses = [...offenses, "noPerson"];
   } else if (faceDirection.match(/right|left|up/gim)) {
     offenses = [...offenses, "lookingAround"];
   }
@@ -46,10 +47,11 @@ export const getOffenses = (faceDirection, personCount, objects) => {
   return offenses;
 };
 
-export const generateLog = (offenses, trackCount, suspiciousSpeech) => {
+export const generateLog = async (offenses, trackCount, suspiciousSpeech, captureImage, uid) => {
   const offensesNumber = offenses.length;
   const timeString = new Date().toLocaleTimeString();
   let log = {};
+  log["multiplePerson"] = log["noPerson"] = log["lookingAround"] = log["haveSuspiciousObject"] = 0;
   for (let i = 0; i < offensesNumber; i++) {
     let offense = offenses[i];
     if (offense !== "null") {
@@ -61,10 +63,23 @@ export const generateLog = (offenses, trackCount, suspiciousSpeech) => {
     log[key] = value / trackCount;
   }
 
-  log["suspiciousSpeech"] = suspiciousSpeech.toString();
-  log["time"] = timeString;
 
-  console.log(log);
+  let speechLength = suspiciousSpeech.length;
+  let speechPercentage = (speechLength >= 5) ? 1 : speechLength / 5;
+  let susRating = (log["multiplePerson"] + log["noPerson"] + log["lookingAround"] + log["haveSuspiciousObject"] + speechPercentage) / 3;
+  log["suspiciousSpeech"] = suspiciousSpeech.toString();
+  log["Time"] = timeString;
+  log["susRating"] = susRating;
+  
+  let image = captureImage();
+  let imageName = uid + timeString;
+  await storage.ref(imageName).putString(image,"data_url");
+  const url = await storage.ref().child(imageName).getDownloadURL();
+  (async() => {
+    console.log("Logged !" + url);
+    log["Image"] = url;
+  })();
+
   return log;
 };
 

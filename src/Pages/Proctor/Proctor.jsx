@@ -78,12 +78,19 @@ const Proctor = ({ uid, examID }) => {
 
   const suspiciousSpeech = processSpeech(transcript, suspiciousDict);
 
+  const captureImage = () => {
+    return webcamRef.current.getScreenshot();
+  }
+
   const handleSendResult = () => {
-    const log = generateLog(offenses, trackCount, suspiciousSpeech);
-    sendResult(examID, uid, log);
-    setOffenses([]);
-    setTrackCount(0);
-    resetTranscript();
+    generateLog(offenses, trackCount, suspiciousSpeech, captureImage, uid)
+    .then((log) => {
+      // console.log(log);
+      sendResult(examID, uid, log);
+      setOffenses([]);
+      setTrackCount(0);
+      resetTranscript();
+    })
   };
 
   useInterval(() => {

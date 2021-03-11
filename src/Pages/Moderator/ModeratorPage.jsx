@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-
+import { useInterval } from "./useInterval";
 import { getStudent } from "./ModeratorFunction";
 
 const ModeratorPage = (props) => {
   
-  const [student, setStudent] = useState([]);
+  const [studentData, setStudentData] = useState([]); 
   const examID = useParams().id;
 
+
   useEffect(() => {
-    getStudent(examID, setStudent);
+    getStudent(examID, setStudentData);
   }, []);
 
+  useInterval(() => {
+    if (studentData) {
+      getStudent(examID, setStudentData)
+    }
+  }, 10000);
 
   return(
     <div>
@@ -19,16 +25,19 @@ const ModeratorPage = (props) => {
         Exam ID: {examID}
       </h3>
       <br></br>
-        {student.map(student => (
-          <Link
-          to={{
-            pathname:`/studentlog/${student}`,
-            state: { examID: examID }
-          }}
-          >
-            {student}
-          <br></br>
-          </Link>
+        {studentData.map(item => (
+          <div>
+            <Link
+            to={{
+              pathname:`/studentlog/${item[0]}`,
+              state: { examID: examID }
+            }}
+            >
+              {item[0]}
+            <br></br>
+            </Link>
+            {item[1]}
+          </div>
         ))}
     </div>
   )
