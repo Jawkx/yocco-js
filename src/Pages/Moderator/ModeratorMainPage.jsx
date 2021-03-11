@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import fire from "../../firebase";
+import { useParams, Link, useHistory } from "react-router-dom";
 
 import { getExam } from "./ModeratorFunction";
 
-const ModeratorMainPage = () => {
+const ModeratorMainPage = (props) => {
+
   const [exam, setExam] = useState([])
-  
+  const { modName }  = props.location.state;
+  let history = useHistory();
+
+  const handleLogout = () => {
+    fire.auth().signOut();
+    history.push("/moderatorLogin");
+  };
 
   useEffect(() => {
-    getExam(setExam);
+    getExam(setExam, modName);
   }, []);
   
   return(
     <div>
+			<button onClick={handleLogout}>
+				Logout
+			</button>
       <h1>Moderator Main Page</h1>
       <br></br>
       {exam.map(exam => (

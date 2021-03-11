@@ -11,6 +11,7 @@ import Homepage from "./Pages/HomePage/HomePage";
 import ModeratorMainPage from "./Pages/Moderator/ModeratorMainPage";
 import ModeratorPage from "./Pages/Moderator/ModeratorPage";
 import StudentLog from "./Pages/Moderator/StudentLog";
+import ModeratorLogin from "./Pages/Moderator/ModeratorLogin";
 
 const App = () => {
   const [user, setUser] = useState(null);
