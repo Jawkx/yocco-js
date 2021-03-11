@@ -11,10 +11,16 @@ import * as tf from "@tensorflow/tfjs";
 import * as cocossd from "@tensorflow-models/coco-ssd";
 import * as blazeface from "@tensorflow-models/blazeface";
 
+import { PageHeader } from "antd";
 // Import custom functions
 import { useCanvas, detect } from "./videoDetectionFunctions";
 import { processSpeech } from "./soundDetectionFunction";
-import { generateLog, getOffenses, sendResult } from "./generalFunctions";
+import {
+  generateLog,
+  getOffenses,
+  sendResult,
+  getSusDict,
+} from "./generalFunctions";
 
 // Import custom Hooks
 import { useInterval } from "./useInterval";
@@ -23,19 +29,6 @@ import VideoPlayer from "./VideoPlayer";
 import Result from "./Result";
 // Import Styles module
 import styles from "./proctorStyle.module.css";
-
-const suspiciousDict = [
-  "question",
-  "array",
-  "voltage",
-  "torque",
-  "current",
-  "copy",
-  "can",
-  "i",
-  "answer",
-  "value",
-];
 
 const suspiciousObjDict = ["books", "cell phone"];
 
@@ -49,6 +42,7 @@ const Proctor = ({ uid, examID }) => {
   const [scaleFactor, setScaleFactor] = useState([1, 1]);
   const [trackCount, setTrackCount] = useState(0);
   const [offenses, setOffenses] = useState([]);
+  const [suspiciousDict, setSuspiciousDict] = useState([]);
 
   // Speech Detection Hooks
   const { transcript, resetTranscript } = useSpeechRecognition();
@@ -98,9 +92,10 @@ const Proctor = ({ uid, examID }) => {
   }, 10000);
 
   useEffect(() => {
+    getSusDict(examID, setSuspiciousDict);
     startVideoDetection();
     SpeechRecognition.startListening({ continuous: true });
-  }, []);
+  }, [examID]);
 
   useEffect(() => {
     const offenses = getOffenses(faceDirection, personCount, objects);
@@ -109,15 +104,22 @@ const Proctor = ({ uid, examID }) => {
   }, [faceDirection, personCount, objects]);
 
   return (
-    <section className={styles.section}>
-      <VideoPlayer webcamRef={webcamRef} canvasRef={canvasRef} />
-      <Result
-        faceDirection={faceDirection}
-        suspiciousObjs={objects}
-        personCount={personCount}
-        startedFaceScanning={startedFaceScanning}
-        filteredResult={suspiciousSpeech}
-      />
+    <section>
+      <PageHeader title={`Exam ${examID}`} />
+      <div className={styles.content}>
+        <VideoPlayer
+          startedFaceScanning={startedFaceScanning}
+          webcamRef={webcamRef}
+          canvasRef={canvasRef}
+        />
+        <Result
+          faceDirection={faceDirection}
+          suspiciousObjs={objects}
+          personCount={personCount}
+          filteredResult={suspiciousSpeech}
+          startedFaceScanning={startedFaceScanning}
+        />
+      </div>
     </section>
   );
 };

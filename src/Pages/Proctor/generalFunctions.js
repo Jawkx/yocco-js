@@ -2,32 +2,15 @@ import firebase from "../../firebase";
 var db = firebase.firestore();
 var storage = firebase.storage();
 
-// export const getLog = (faceDirection, personCount, objects, date) => {
-//   let suspicious = false;
+export const getSusDict = (examid, setSusDict) => {
+  const docRef = db.collection("examsInfo").doc(examid);
 
-//   let log = {
-//     date: date.toLocaleTimeString(),
-//   };
-
-//   if (objects.length) {
-//     log["suspiciousObjects"] = objects.map((object) => object.class);
-//     suspicious = true;
-//   }
-
-//   if (personCount > 1) {
-//     log["personCount"] = personCount;
-//     suspicious = true;
-//   } else if (faceDirection.match(/right|left|up/gim)) {
-//     log["facingDirection"] = faceDirection;
-//     suspicious = true;
-//   }
-
-//   if (suspicious) {
-//     return log;
-//   } else {
-//     return null;
-//   }
-// };
+  docRef.get().then((doc) => {
+    if (doc.exists) {
+      setSusDict(doc.data().suspiciousText);
+    }
+  });
+};
 
 export const getOffenses = (faceDirection, personCount, objects) => {
   let offenses = [];
