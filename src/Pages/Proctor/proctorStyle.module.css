@@ -1,10 +1,13 @@
-.section {
+@import "antd/dist/antd.css";
+
+.content {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
-  min-height: 100vh;
+  min-height: 80vh;
 }
+
 .display {
   border: 3px black solid;
   position: relative;
@@ -12,6 +15,9 @@
   min-width: 480px;
 }
 
+.result {
+  width: 40vw;
+}
 .video {
   position: absolute;
   margin-right: auto;
@@ -32,8 +38,4 @@
   z-index: 1;
   width: 480;
   height: 360;
-}
-
-.result {
-  min-width: 30vw;
 }
