@@ -30,11 +30,19 @@ export const getOffenses = (faceDirection, personCount, objects) => {
   return offenses;
 };
 
-export const generateLog = async (offenses, trackCount, suspiciousSpeech, captureImage, uid) => {
+export const generateLog = async (
+  offenses,
+  trackCount,
+  suspiciousSpeech,
+  captureImage,
+  uid
+) => {
   const offensesNumber = offenses.length;
   const timeString = new Date().toLocaleTimeString();
   let log = {};
-  log["multiplePerson"] = log["noPerson"] = log["lookingAround"] = log["haveSuspiciousObject"] = 0;
+  log["multiplePerson"] = log["noPerson"] = log["lookingAround"] = log[
+    "haveSuspiciousObject"
+  ] = 0;
   for (let i = 0; i < offensesNumber; i++) {
     let offense = offenses[i];
     if (offense !== "null") {
@@ -46,19 +54,24 @@ export const generateLog = async (offenses, trackCount, suspiciousSpeech, captur
     log[key] = value / trackCount;
   }
 
-
   let speechLength = suspiciousSpeech.length;
-  let speechPercentage = (speechLength >= 5) ? 1 : speechLength / 5;
-  let susRating = (log["multiplePerson"] + log["noPerson"] + log["lookingAround"] + log["haveSuspiciousObject"] + speechPercentage) / 3;
+  let speechPercentage = speechLength >= 5 ? 1 : speechLength / 5;
+  let susRating =
+    (log["multiplePerson"] +
+      log["noPerson"] +
+      log["lookingAround"] +
+      log["haveSuspiciousObject"] +
+      speechPercentage) /
+    3;
   log["suspiciousSpeech"] = suspiciousSpeech.toString();
   log["Time"] = timeString;
   log["susRating"] = susRating;
-  
+
   let image = captureImage();
   let imageName = uid + timeString;
-  await storage.ref(imageName).putString(image,"data_url");
+  await storage.ref(imageName).putString(image, "data_url");
   const url = await storage.ref().child(imageName).getDownloadURL();
-  (async() => {
+  (async () => {
     console.log("Logged !" + url);
     log["Image"] = url;
   })();

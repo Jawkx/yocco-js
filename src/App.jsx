@@ -13,21 +13,31 @@ import ModeratorPage from "./Pages/Moderator/ModeratorPage";
 import StudentLog from "./Pages/Moderator/StudentLog";
 import ModeratorLogin from "./Pages/Moderator/ModeratorLogin";
 
+var db = fire.firestore();
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [uid, setUid] = useState(null);
+  const [isStudent, setIsStudent] = useState(null);
   const [examID, setExamID] = useState(null);
 
   useEffect(() => {
     fire.auth().onAuthStateChanged((user) => {
       if (user) {
-        setUser(user.uid);
+        setUid(user.uid);
+        db.collection("usersInfo")
+          .doc(user.uid)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              setIsStudent(doc.data().isStudent);
+            }
+          });
       } else {
-        setUser("");
+        setUid("");
       }
     });
   }, []);
 
-  if (!user) {
+  if (!uid && !isStudent) {
     return <LoginPage />;
   }
 
@@ -38,16 +48,19 @@ const App = () => {
           <Route
             path="/proctor"
             exact
-            render={() => <Proctor uid={user} examID={examID} />}
+            render={() => <Proctor uid={uid} examID={examID} />}
           />
-          <Route
-            path="/*"
-            exact
-            render={() => <Homepage uid={user} setExamID={setExamID} />}
-          />
-          <Route path="/moderatorMain" render={() => <ModeratorMainPage />} />
           <Route path="/moderator/:id" render={() => <ModeratorPage />} />
           <Route path="/studentLog/:id" component={StudentLog} />
+          {isStudent ? (
+            <Route
+              path="/*"
+              exact
+              render={() => <Homepage uid={uid} setExamID={setExamID} />}
+            />
+          ) : (
+            <Route path="/moderatorMain" render={() => <ModeratorMainPage />} />
+          )}
         </Switch>
       </Router>
     </div>
