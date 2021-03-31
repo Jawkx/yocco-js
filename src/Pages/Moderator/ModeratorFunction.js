@@ -1,6 +1,16 @@
 import firebase from "../../firebase";
 var db = firebase.firestore();
 
+export const getName = (uid, setName) => {
+  const docRef = db.collection("usersInfo").doc(uid);
+  docRef.get().then((doc) => {
+    if (doc.exists) {
+      const modName = doc.data().name;
+      setName(modName);
+    }
+  })
+}
+
 export const getStudentLogPhone = (examID , studentID, setStudentLogPhone, setChartLabelPhone, setChartDataPhone) => {
   const docRef = db.collection("examsLog").doc(examID);
   docRef.get().then((doc) => {
@@ -73,21 +83,27 @@ export const getScore = (student, examID, setScore) => {
 }
 
 
-export const getExam = (setExam, modName) => {
-  const docRefExam = db.collection("examsInfo");
-  const docRefMod = db.collection("moderatorsInfo").doc(modName);
+export const getExam = (modName, setExamInfo) => {
+  const docRefMod = db.collection("usersInfo").doc(modName);
   docRefMod.get().then((docMod) => {
     if (docMod.exists) {
       const assignedExams = docMod.data().exams;
-      docRefExam.onSnapshot((queryss) => {
-        let exam = [];
-        queryss.forEach((doc) => {
-          if (assignedExams.includes(doc.id)) {
-            exam.push(doc.id);
+      for (let i = 0; i < assignedExams.length; i++) {
+        const examID = assignedExams[i];
+        const docRefExam = db.collection("examsInfo").doc(examID);
+        docRefExam.get().then((doc) => {
+          if (doc.exists) {
+            const examdata = doc.data();
+            const examInfo = {
+              id : examID,
+              name: examdata.title,
+              timeStart: examdata.timeStart,
+              timeEnd: examdata.timeEnd
+            };
+            setExamInfo((prevInfo) => [...prevInfo, examInfo]);
           }
         })
-        setExam(exam)
-      })
+      }
     }
   })
 }

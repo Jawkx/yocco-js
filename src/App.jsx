@@ -41,6 +41,8 @@ const App = () => {
     return <LoginPage />;
   }
 
+  console.log(isStudent);
+
   return (
     <div className="App">
       <Router>
@@ -59,7 +61,11 @@ const App = () => {
               render={() => <Homepage uid={uid} setExamID={setExamID} />}
             />
           ) : (
-            <Route path="/moderatorMain" render={() => <ModeratorMainPage />} />
+            <Route 
+              path="/*" 
+              exact
+              render={() => <ModeratorMainPage uid={uid} />} 
+            />
           )}
         </Switch>
       </Router>
