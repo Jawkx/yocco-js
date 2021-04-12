@@ -3,8 +3,9 @@ import { Button, Card, PageHeader, Divider } from "antd";
 import fire from "../../firebase";
 import { useParams, Link, useHistory } from "react-router-dom";
 import { getExam, getName } from "./ModeratorFunction";
+import styles from "./moderatorPage.module.css";
 
-const ModeratorMainPage = ({uid}) => {
+const ModeratorMainPage = ({uid, setExamID}) => {
 
   const [name, setName] = useState("");
   const [examInfo, setExamInfo] = useState([]);
@@ -17,6 +18,10 @@ const ModeratorMainPage = ({uid}) => {
   const handleLogout = () => {
     fire.auth().signOut();
     history.push("/");
+  };
+
+  const handleGoProctor = (examid) => {
+    setExamID(examid);
   };
 
   useEffect(() => {
@@ -36,7 +41,9 @@ const ModeratorMainPage = ({uid}) => {
         {exam.timeStart.toDate().toLocaleTimeString()} to{" "}
         {exam.timeEnd.toDate().toLocaleTimeString()}
       </p>
-      <Button> Check Student Log </Button>
+      <Link to="/moderator">
+        <Button onClick={() => handleGoProctor(exam.id)}> Invigilate </Button>
+      </Link>
     </Card>
   ));
 

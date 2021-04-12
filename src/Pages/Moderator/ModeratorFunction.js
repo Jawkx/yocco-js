@@ -1,6 +1,20 @@
 import firebase from "../../firebase";
 var db = firebase.firestore();
 
+export function compare(a, b) {
+  // Use toUpperCase() to ignore character casing
+  const scoreA = a.susScore;
+  const scoreB = b.susScore;
+
+  let comparison = 0;
+  if (scoreA > scoreB) {
+    comparison = -1;
+  } else if (scoreA < scoreB) {
+    comparison = 1;
+  }
+  return comparison;
+}
+
 export const getName = (uid, setName) => {
   const docRef = db.collection("usersInfo").doc(uid);
   docRef.get().then((doc) => {
@@ -44,22 +58,37 @@ export const getStudent = (examID, setStudentData) => {
     if (doc.exists) {
       const students = doc.data().participants;
       docRefScore.get().then((log) => {
-        let scoreArr = [];
+        let totalDetails = [];
         students.forEach((id) => {
           let studentLog = [];
           let score = 0;
           if (log.data()[id]) {
             let studentLog = log.data()[id];
-          }
+          };
           if (studentLog.length != 0) {
             score = studentLog[studentLog.length - 1].susRating;     
-          }
-          scoreArr.push(score)
+          };
+
+          let susLevel = "";
+          if (score <= 0.3) {
+            susLevel = "Low";
+          };
+          if (score > 0.3 && score < 0.5) {
+            susLevel = "Moderate";
+          };
+          if (score >= 0.5) {
+            susLevel = "High";
+          };
+
+          var studentDetails = {
+            id : id,
+            susLevel : susLevel,
+            susScore : score
+          };
+          totalDetails.push(studentDetails);
         });
-        var combined = students.map(function(itm,i){
-          return [itm, scoreArr[i]]
-        });
-        setStudentData(combined)
+        totalDetails.sort(compare)
+        setStudentData(totalDetails);
       });
     }
   });

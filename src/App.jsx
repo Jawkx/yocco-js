@@ -11,7 +11,6 @@ import Homepage from "./Pages/HomePage/HomePage";
 import ModeratorMainPage from "./Pages/Moderator/ModeratorMainPage";
 import ModeratorPage from "./Pages/Moderator/ModeratorPage";
 import StudentLog from "./Pages/Moderator/StudentLog";
-import ModeratorLogin from "./Pages/Moderator/ModeratorLogin";
 
 var db = fire.firestore();
 const App = () => {
@@ -52,8 +51,12 @@ const App = () => {
             exact
             render={() => <Proctor uid={uid} examID={examID} />}
           />
-          <Route path="/moderator/:id" render={() => <ModeratorPage />} />
-          <Route path="/studentLog/:id" component={StudentLog} />
+          <Route 
+            path="/moderator" 
+            exact
+            render={() => <ModeratorPage examID={examID} />} 
+          />
+          <Route path="/studentLog" component={StudentLog} />
           {isStudent ? (
             <Route
               path="/*"
@@ -64,7 +67,7 @@ const App = () => {
             <Route 
               path="/*" 
               exact
-              render={() => <ModeratorMainPage uid={uid} />} 
+              render={() => <ModeratorMainPage uid={uid} setExamID={setExamID} />} 
             />
           )}
         </Switch>

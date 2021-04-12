@@ -1,0 +1,28 @@
+.table {
+  width: 500px;
+}
+
+.row {
+  background-color:#bdffd9;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.item {
+  display: flex;
+}
+
+.low {
+  background-color:#bdffd9;
+}
+
+.moderate {
+  background-color:#ffd9a8;
+}
+
+.high {
+  background-color: #ff9e9e;
+}
