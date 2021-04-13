@@ -8,6 +8,24 @@ import styles from "./moderatorPage.module.css";
 const ModeratorPage = ({examID}) => {
   let history = useHistory();
   const [studentData, setStudentData] = useState([]); 
+  const test = [
+    {
+      id: "ecywl1",
+      susLevel: "High",
+    },
+    {
+      id: "ecyjc2",
+      susLevel: "Moderate",
+    },
+    {
+      id: "efyyl2",
+      susLevel: "Low",
+    },
+    {
+      id: "efykj1",
+      susLevel: "Low",
+    },
+  ];
   const columns = [
     {
       title: "Student ID",
@@ -20,30 +38,6 @@ const ModeratorPage = ({examID}) => {
       align: "center",
     }
   ];
-  const testData = [
-    {
-      id: "ecywl1",
-      susLevel: "Low",
-      susScore: 0
-    },
-    {
-      id: "ecyjc2",
-      susLevel: "Moderate",
-      susScore: 50
-    },
-    {
-      id: "efyyl2",
-      susLevel: "High",
-      susScore: 100
-    },
-    {
-      id: "efykj1",
-      susLevel: "Low",
-      susScore: 0
-    }
-  ];
-
-  testData.sort(compare);
 
 
   useEffect(() => {
@@ -56,12 +50,12 @@ const ModeratorPage = ({examID}) => {
     }
   }, 10000);
 
-  console.log(studentData);
 
   const studentList = (
     <Table 
       columns={columns} 
-      dataSource={testData}
+      dataSource={test} 
+      //dataSource={studentData}
       className={styles.table}
       rowClassName={(student, index) => (
         student.susLevel == "Low" ? styles.low :
@@ -91,6 +85,7 @@ const ModeratorPage = ({examID}) => {
     <div>
       <PageHeader
         title={`${examID} Invigilation dashboard`}
+        subTitle={`Number of attendees: ${test.length}`}
         extra={[
           <Link
             to="/"
