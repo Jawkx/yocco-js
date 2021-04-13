@@ -1,42 +1,65 @@
 import React, { useState, useEffect } from "react";
+import { Button, Card, PageHeader, Divider } from "antd";
 import fire from "../../firebase";
 import { useParams, Link, useHistory } from "react-router-dom";
+import { getExam, getName } from "./ModeratorFunction";
+import styles from "./moderatorPage.module.css";
 
-import { getExam } from "./ModeratorFunction";
+const ModeratorMainPage = ({uid, setExamID}) => {
 
-const ModeratorMainPage = (props) => {
+  const [name, setName] = useState("");
+  const [examInfo, setExamInfo] = useState([]);
 
-  const [exam, setExam] = useState([])
-  const { modName }  = props.location.state;
   let history = useHistory();
+
+
+  console.log(name);
 
   const handleLogout = () => {
     fire.auth().signOut();
-    history.push("/moderatorLogin");
+    history.push("/");
+  };
+
+  const handleGoProctor = (examid) => {
+    setExamID(examid);
   };
 
   useEffect(() => {
-    getExam(setExam, modName);
+    getExam(uid, setExamInfo);
+    getName(uid, setName);
   }, []);
   
+  console.log(examInfo);
+
+  const examsDisplay = examInfo.map((exam, idx) => (
+    <Card
+      title={exam.name + "  -  " + exam.id}
+      key={idx}
+      style={{ width: 400, margin: "30px" }}
+    >
+      <p>
+        {exam.timeStart.toDate().toLocaleTimeString()} to{" "}
+        {exam.timeEnd.toDate().toLocaleTimeString()}
+      </p>
+      <Link to="/moderator">
+        <Button onClick={() => handleGoProctor(exam.id)}> Invigilate </Button>
+      </Link>
+    </Card>
+  ));
+
+
   return(
     <div>
-			<button onClick={handleLogout}>
-				Logout
-			</button>
-      <h1>Moderator Main Page</h1>
-      <br></br>
-      {exam.map(exam => (
-        <Link
-        to={{
-          pathname:`/moderator/${exam}`,
-          state: {examID : exam}
-        }}
-        >
-          {exam}
-          <br></br>
-        </Link>
-      ))}
+      <PageHeader
+        title={`Welcome ${name}, to your moderator dashboard`}
+        extra={[
+          <Button type="primary" onClick={() => handleLogout()}>
+            Log Out
+          </Button>
+        ]}
+      />
+      <Divider> Your Exams </Divider>
+      <div>{examsDisplay}</div>
     </div>
   )
 };
