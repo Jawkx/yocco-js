@@ -9,7 +9,7 @@ const ModeratorMainPage = ({uid, setExamID}) => {
 
   const [name, setName] = useState("");
   const [examInfo, setExamInfo] = useState([]);
-
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   let history = useHistory();
 
 
@@ -29,14 +29,17 @@ const ModeratorMainPage = ({uid, setExamID}) => {
     getName(uid, setName);
   }, []);
   
-  console.log(examInfo);
 
   const examsDisplay = examInfo.map((exam, idx) => (
+    
     <Card
       title={exam.name + "  -  " + exam.id}
       key={idx}
       style={{ width: 400, margin: "30px" }}
     >
+      <p>
+        {exam.timeStart.toDate().toDateString()} 
+      </p>
       <p>
         {exam.timeStart.toDate().toLocaleTimeString()} to{" "}
         {exam.timeEnd.toDate().toLocaleTimeString()}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useInterval } from "./useInterval";
+import { Button, Card, PageHeader, Divider, Table } from "antd";
 
 //Chart
 import { LogChart, LogChartPhone } from "./LogChart";
@@ -10,6 +11,7 @@ import {
   getStudentLog, 
   getStudentLogPhone, 
 } from "./ModeratorFunction";
+import { Div } from "@tensorflow/tfjs-core";
 
 const StudentLog = () => {
   
@@ -24,36 +26,49 @@ const StudentLog = () => {
   const [chartLabelPhone, setChartLabelPhone] = useState([]);
   const [chartDataPhone, setChartDataPhone] = useState([]);
 
-  // useEffect(() => {
-  //   getStudentLog(examID, studentID, setStudentLog, setChartLabel, setChartData);
-  //   getStudentLogPhone(examIDPhone, studentID, setStudentLogPhone, setChartLabelPhone, setChartDataPhone);
-  // }, []);
+  useEffect(() => {
+    getStudentLog(examID, studentID, setStudentLog, setChartLabel, setChartData);
+    getStudentLogPhone(examIDPhone, studentID, setStudentLogPhone, setChartLabelPhone, setChartDataPhone);
+  }, []);
 
-  // useInterval(() => {
-  //   getStudentLog(examID, studentID, setStudentLog, setChartLabel, setChartData);
-  //   getStudentLogPhone(examIDPhone, studentID, setStudentLogPhone, setChartLabelPhone, setChartDataPhone);
-  // }, 10000);
-  
-  console.log(examID)
-  console.log(studentID)
+  useInterval(() => {
+    getStudentLog(examID, studentID, setStudentLog, setChartLabel, setChartData);
+    getStudentLogPhone(examIDPhone, studentID, setStudentLogPhone, setChartLabelPhone, setChartDataPhone);
+  }, 10000);
+
 
   return(
-    <>yo</>
-    // <div>
-    //   <h2>SUSPICIOUS LOG OF {studentID} IN {examID}</h2>
-    //   <h3>Webcam Detection: </h3>
-    //   <LogChart
-    //     chartLabel = { chartLabel }
-    //     chartData = { chartData }
-    //     studentLog = { studentLog }
-    //   />
-    //   <h3>Phone Detection: </h3>
-    //   <LogChartPhone 
-    //     chartLabel = { chartLabelPhone } 
-    //     chartData = { chartDataPhone }
-    //     studentLog = { studentLogPhone }
-    //   />
-    // </div>
+    <div>
+      <PageHeader
+        title={`Suspicious Log of ${studentID} in ${examID}`}
+        extra={[
+          <Link
+            to="/moderator"
+          >
+            <Button type="primary">
+              Back to Examination Page
+            </Button>,
+          </Link>
+        ]}
+      />
+      <div style={{margin: 20}}>
+        <Divider orientation="left">Webcam Detection</Divider>
+        <LogChart
+            chartLabel = { chartLabel }
+            chartData = { chartData }
+            studentLog = { studentLog }
+        />
+      </div>
+      <div style={{margin: 20, marginTop: 50}}>
+        <Divider orientation="left">Phone Detection</Divider>
+        <LogChartPhone 
+          chartLabel = { chartLabelPhone } 
+          chartData = { chartDataPhone }
+          studentLog = { studentLogPhone }
+        />
+      </div>
+    </div>
+
   )
 };
 
