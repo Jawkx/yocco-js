@@ -5,7 +5,7 @@ import "antd/dist/antd.css";
 import { Link } from "react-router-dom";
 import fire from "../../firebase";
 
-const HomePage = ({ uid, setExamID }) => {
+const HomePage = ({ uid, setExamID, setUid }) => {
   const [userInfo, setUserInfo] = useState({
     name: "",
   });
@@ -20,6 +20,7 @@ const HomePage = ({ uid, setExamID }) => {
   };
 
   const handleLogOut = () => {
+    setUid("");
     fire.auth().signOut();
   };
 

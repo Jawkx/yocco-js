@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Card, message } from "antd";
+import { Form, Input, Button, Card, message, Image } from "antd";
 
 import { useHistory, Link } from "react-router-dom";
 import fire from "../../firebase";
 import styles from "./loginStyle.module.css";
 
+import unmlogo from "./UONLOGO.png";
+
 const LoginPage = ({ setUser, user }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [hasAccount, setHasAccount] = useState(false);
 
   console.log(email);
   const handleLogin = () => {
@@ -34,6 +33,7 @@ const LoginPage = ({ setUser, user }) => {
 
   return (
     <section className={styles.section}>
+      <Image className={styles.image} src={unmlogo} width={300} />
       <Card title="Login" style={{ width: "60vw" }}>
         <Form name="Login" onsub>
           <Form.Item label="Email">
